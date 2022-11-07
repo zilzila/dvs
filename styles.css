@@ -1,0 +1,134 @@
+* {
+    box-sizing: border-box;
+}
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #111;
+    color: #ddd;
+}
+iframe {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border: 0;
+}
+img {
+    border: 0;
+}
+h1 {
+    padding: 0;
+    margin: 0;
+}
+.text-center {
+    text-align: center;
+}
+a {
+    background-color: transparent;
+    text-decoration: none;
+    color: inherit;
+}
+.grid.main {
+    display: grid;
+    grid-template-areas:
+            "chat header"
+            "chat links"
+            "chat stream"
+            "chat donate"
+            "chat wall"
+    ;
+    grid-template-columns: auto 1fr;
+    gap: 5px;
+}
+.grid.main.chat-right{
+    grid-template-areas:
+            "header chat"
+            "links chat"
+            "stream chat"
+            "donate chat"
+            "wall chat"
+    ;
+    grid-template-columns: 1fr auto;
+}
+.chat {
+    grid-area: chat;
+    width: 450px;
+}
+.header {grid-area: header}
+.links {
+    grid-area: links;
+    font-weight: 600;
+}
+.stream {
+    grid-area: stream;
+    aspect-ratio: 16/9;
+}
+.chat iframe {
+    position: sticky;
+    height: 100vh;
+    top: 0;
+}
+#logo {
+    line-height: 0;
+}
+#logo a {
+    display: inline-block;
+}
+#logo img {
+    width: 300px;
+}
+.breadcrumb {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+.breadcrumb > li + li::before {
+    padding: 0 5px;
+    content: "/\00a0";
+}
+.breadcrumb li a.active {
+    color: #a76bff;
+}
+.breadcrumb li a {
+    white-space: nowrap;
+}
+.breadcrumb a:hover {
+    text-shadow: 0 0 10px #fff;
+}
+.fa {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    margin-right: 5px;
+}
+.fa-file-text-o::before {content: "\f0f6";}
+.fa-tablet::before {content: "\f10a";}
+.fa-twitch::before {content: "\f1e8";}
+.fa-odnoklassniki::before {content: "\f263";}
+.fa-vk::before {content: "\f189";}
+.fa-money::before {content: "\f0d6";}
+.fa-rub::before {content: "\f158";}
+
+a.donate {
+    font-weight: 600;
+    color: #222;
+    padding: 0 3px;
+}
+.donate.d1 {
+    background-color:#FFFF33;
+}
+.donate.d2 {
+    background-color:#00FF00;
+}
+.donate.d3 {
+    background-color: #db66ff;
+}
+.container.donates {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    column-gap: 5px;
+    justify-content: start;
+}
