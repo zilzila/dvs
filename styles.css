@@ -30,43 +30,77 @@ a {
 }
 .grid.main {
     display: grid;
-    grid-template-areas:
-            "chat header"
-            "chat links"
-            "chat stream"
-            "chat donate"
-            "chat wall"
-    ;
-    grid-template-columns: auto 1fr;
     gap: 5px;
+    align-items: start;
 }
-.grid.main.chat-right{
-    grid-template-areas:
-            "header chat"
-            "links chat"
-            "stream chat"
-            "donate chat"
-            "wall chat"
-    ;
-    grid-template-columns: 1fr auto;
+@media (orientation: landscape) {
+    .grid.main {
+        grid-template-areas:
+                "chat header"
+                "chat links"
+                "chat stream"
+                "chat donates"
+        ;
+        grid-template-columns: auto 1fr;
+        grid-template-rows: repeat(3, auto) 1fr;
+    }
+    .grid.main.chat-right{
+        grid-template-areas:
+                "header  chat"
+                "links   chat"
+                "stream  chat"
+                "donates chat"
+        ;
+        grid-template-columns: 1fr auto;
+    }
+    .container.chat{
+        width: 450px;
+    }
+    .container.chat iframe {
+        position: sticky;
+        height: 100vh;
+        top: 0;
+    }
+    .container.donates {
+        grid-area: donates;
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        column-gap: 5px;
+        justify-content: start;
+    }
 }
-.chat {
-    grid-area: chat;
-    width: 450px;
+@media (orientation: portrait) {
+    .grid.main {
+        grid-template-areas:
+                /*"header"*/
+                /*"links"*/
+                "stream"
+                "chat"
+                /*"donates"*/
+        ;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+        height: 100vh;
+    }
+    .container.chat{
+        width: 100%;
+    }
+    .container.header, .container.links, .container.donates {
+        display: none;
+    }
 }
-.header {grid-area: header}
-.links {
+.container.header {grid-area: header}
+.container.links {
     grid-area: links;
     font-weight: 600;
 }
-.stream {
+.container.stream {
     grid-area: stream;
     aspect-ratio: 16/9;
 }
-.chat iframe {
-    position: sticky;
-    height: 100vh;
-    top: 0;
+.container.chat {
+    grid-area: chat;
+    height: 100%;
 }
 #logo {
     line-height: 0;
@@ -125,10 +159,5 @@ a.donate {
 }
 .donate.d3 {
     background-color: #db66ff;
-}
-.container.donates {
-    display: grid;
-    grid-template-columns: repeat(3, auto);
-    column-gap: 5px;
-    justify-content: start;
+    white-space: nowrap;
 }

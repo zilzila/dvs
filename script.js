@@ -1,16 +1,16 @@
 const storageAvailable = localStorageAvailable();
+let portraitOrientation;
 
-$(document).ready(function(){
-    $('#breadcrumb-ok, #breadcrumb-twitch').click(function(){
-        let href = this.getAttribute('href');
-        // Замена parent у twitch
-        href = href.replace('&parent=twitch.tv', '&parent=' + document.location.hostname);
-        $('.container.stream iframe').attr('src', href);
+$(function(){
+    $('#breadcrumb-ok, #breadcrumb-twitch').on('click', function(){
+        const streamId  = this.getAttribute('id');
+        const streamSrc = this.getAttribute('href')
+            .replace('&parent=twitch.tv', '&parent=' + document.location.hostname);
 
-        setStorage('streamId', this.getAttribute('id'));
-        setStorage('streamSrc', href);
+        setStorage('streamId', streamId);
+        setStorage('streamSrc', streamSrc);
 
-        $(this).addClass('active').parent().siblings().find('a').removeClass('active');
+        applyStreamSetings(streamId, streamSrc);
 
         return false;
     });
@@ -25,39 +25,30 @@ $(document).ready(function(){
         }
     });
 
-    // Загрузка сохранённых настроек из локального хранилища
-    if (storageAvailable){
-        // Применение настроек чата
-        const $chat = $('.container.chat');
-        const chatWidth = localStorage.getItem('chatWidth');
-        if (parseInt(chatWidth) > 0){
-            $chat.width(chatWidth);
-        }
-
-        const chatRight = localStorage.getItem('chatRight');
-        if (chatRight){
-            $('.grid.main').addClass('chat-right');
-            $chat.resizable('option', 'handles', 'w');
-        }
-
-        // Применение настроек стрима
-        const streamId = localStorage.getItem('streamId') ?? 'breadcrumb-ok';
-        $('#' + streamId).addClass('active');
-
-        const streamSrc = localStorage.getItem('streamSrc');
-        if (streamSrc){
-            $('.container.stream iframe').attr('src', streamSrc);
-        }
-    }
-
     $('.grid.main').on('dblclick', '.container.chat .ui-resizable-handle', function(){
         const $grid = $('.grid.main');
         $grid.toggleClass('chat-right');
 
-        $('.container.chat').resizable('option', 'handles', $grid.hasClass('chat-right') ? 'w' : 'e');
-
         setStorage('chatRight', $grid.hasClass('chat-right') ? 1 : '');
-    })
+
+        applyChatSettings('', $grid.hasClass('chat-right'))
+    });
+
+    // Create the query list.
+    const mediaQueryList = window.matchMedia("(orientation: portrait)");
+
+    // Define a callback function for the event listener.
+    function handleOrientationChange(e) {
+        portraitOrientation = e.matches;
+        applyChatSettings();
+        applyStreamSetings();
+    }
+
+    // Run the orientation change handler once.
+    handleOrientationChange(mediaQueryList);
+
+    // Add the callback function as a listener to the query list.
+    mediaQueryList.addEventListener('change', handleOrientationChange);
 });
 
 function localStorageAvailable() {
@@ -88,5 +79,54 @@ function localStorageAvailable() {
 function setStorage(key, value) {
     if (storageAvailable){
         localStorage.setItem(key, value);
+    }
+}
+
+function applyChatSettings(width, right){
+    const $chat = $('.container.chat');
+
+    if (portraitOrientation) {
+        $chat.resizable('disable');
+        $chat.css('width', '');
+        $('.grid.main').removeClass('chat-right');
+    }else{
+        let chatWidth = width;
+        let chatRight = right;
+
+        if (storageAvailable){
+            chatWidth = localStorage.getItem('chatWidth');
+            chatRight = localStorage.getItem('chatRight');
+        }
+
+        if (chatRight){
+            $('.grid.main').addClass('chat-right');
+        }
+
+        $chat.resizable('enable');
+        $chat.resizable('option', 'handles', chatRight ? 'w' : 'e');
+
+        if (chatWidth){
+            $chat.width(chatWidth);
+        }
+    }
+}
+
+function applyStreamSetings(id, src){
+    let streamId = id;
+    let streamSrc = src;
+
+    if (storageAvailable){
+        streamId = localStorage.getItem('streamId') ?? 'breadcrumb-ok';
+        streamSrc = localStorage.getItem('streamSrc');
+    }
+
+    if (streamId){
+        $('#' + streamId).addClass('active').parent().siblings().find('a').removeClass('active');
+    }
+
+    const $streamFrame = $('.container.stream iframe');
+
+    if (streamSrc && streamSrc !== $streamFrame.attr('src')){
+        $streamFrame.attr('src', streamSrc);
     }
 }
