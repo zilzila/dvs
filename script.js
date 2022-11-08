@@ -20,8 +20,12 @@ $(function(){
         resize: function (event, ui){
             ui.position.left = 0;
         },
+        start: function (){
+            $('.grid').addClass('resizing');
+        },
         stop: function (event, ui){
             setStorage('chatWidth', ui.size.width);
+            $('.grid').removeClass('resizing');
         }
     });
 

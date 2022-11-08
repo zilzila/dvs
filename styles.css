@@ -33,6 +33,9 @@ a {
     gap: 5px;
     align-items: start;
 }
+.grid.resizing .container{
+    pointer-events: none;
+}
 @media (orientation: landscape) {
     .grid.main {
         grid-template-areas:
