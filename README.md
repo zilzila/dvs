@@ -1,4 +1,4 @@
-# Альтернативная версия сайтов [dv-stream.ru](dv-stream.ru)/[unclevania.ru](unclevania.ru)
+# Альтернативная версия сайтов [dv-stream.ru](dv-stream.ru) / [unclevania.ru](unclevania.ru)
 **Основные возможности:**
 - Чат на всю высоту экрана
 - Размер чата можно изменять, перетаскивая границу со стримом
