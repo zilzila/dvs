@@ -71,6 +71,9 @@ a {
         column-gap: 5px;
         justify-content: start;
     }
+    .ui-resizable .ui-resizable-handle {
+        width: 30px;
+    }
     .ui-resizable-e {
         right: -20px;
     }
@@ -90,12 +93,21 @@ a {
         grid-template-columns: 1fr;
         grid-template-rows: auto 1fr;
         height: 100vh;
+        overflow: hidden;
+    }
+    .container.stream {
+        justify-self: center;
+        min-width: 100%;
     }
     .container.chat{
         width: 100%;
     }
     .container.header, .container.links, .container.donates {
         display: none;
+    }
+    .ui-resizable .ui-resizable-handle {
+        height: 30px;
+        bottom: -30px;
     }
 }
 .container.header {grid-area: header}
@@ -169,7 +181,4 @@ a.donate {
 .donate.d3 {
     background-color: #db66ff;
     white-space: nowrap;
-}
-.ui-resizable .ui-resizable-handle {
-    width: 30px;
 }

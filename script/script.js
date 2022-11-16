@@ -1,7 +1,11 @@
 const storageAvailable = localStorageAvailable();
 let portraitOrientation;
+let $grid;
+let touchTime = 0;
 
 $(function(){
+    $grid = $('.grid.main');
+
     $('#breadcrumb-ok, #breadcrumb-twitch').on('click', function(){
         const streamId  = this.getAttribute('id');
         const streamSrc = this.getAttribute('href')
@@ -21,21 +25,45 @@ $(function(){
             ui.position.left = 0;
         },
         start: function (){
-            $('.grid').addClass('resizing');
+            $grid.addClass('resizing');
         },
         stop: function (event, ui){
             setStorage('chatWidth', ui.size.width);
-            $('.grid').removeClass('resizing');
+            $grid.removeClass('resizing');
         }
     });
 
-    $('.grid.main').on('dblclick', '.container.chat .ui-resizable-handle', function(){
-        const $grid = $('.grid.main');
-        $grid.toggleClass('chat-right');
+    $('.container.stream').resizable({
+        handles: "s",
+        resize: function (event, ui){
+            ui.position.bottom = 0;
+        },
+        start: function (){
+            $grid.addClass('resizing');
+        },
+        stop: function (){
+            $grid.removeClass('resizing');
+        }
+    });
 
-        setStorage('chatRight', $grid.hasClass('chat-right') ? 1 : '');
+    $grid.on('click', '.container.chat .ui-resizable-handle', function(){
+        if (((new Date().getTime()) - touchTime) < 500) {
+            $grid.toggleClass('chat-right');
 
-        applyChatSettings('', $grid.hasClass('chat-right'))
+            setStorage('chatRight', $grid.hasClass('chat-right') ? 1 : '');
+
+            applyChatSettings('', $grid.hasClass('chat-right'))
+        }
+        touchTime = new Date().getTime();
+    });
+
+    // Обработчик двойного клика
+    // (в jQuery нет обработчика dblclick для сенсорных устройств)
+    $grid.on("click", '.container.stream .ui-resizable-handle', function() {
+        if (((new Date().getTime()) - touchTime) < 500) {
+            $grid.find('.container.stream').css('height', '');
+        }
+        touchTime = new Date().getTime();
     });
 
     // Create the query list.
@@ -88,12 +116,18 @@ function setStorage(key, value) {
 
 function applyChatSettings(width, right){
     const $chat = $('.container.chat');
+    const $stream = $('.container.stream');
 
     if (portraitOrientation) {
         $chat.resizable('disable');
         $chat.css('width', '');
-        $('.grid.main').removeClass('chat-right');
+
+        $stream.resizable('enable');
+        $grid.removeClass('chat-right');
     }else{
+        $stream.resizable('disable');
+        $stream.css('height', '');
+
         let chatWidth = width;
         let chatRight = right;
 
@@ -103,7 +137,7 @@ function applyChatSettings(width, right){
         }
 
         if (chatRight){
-            $('.grid.main').addClass('chat-right');
+            $grid.addClass('chat-right');
         }
 
         $chat.resizable('enable');
