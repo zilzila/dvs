@@ -71,6 +71,12 @@ a {
         column-gap: 5px;
         justify-content: start;
     }
+    .ui-resizable-e {
+        right: -20px;
+    }
+    .ui-resizable-w {
+        left: -20px;
+    }
 }
 @media (orientation: portrait) {
     .grid.main {
@@ -163,4 +169,7 @@ a.donate {
 .donate.d3 {
     background-color: #db66ff;
     white-space: nowrap;
+}
+.ui-resizable .ui-resizable-handle {
+    width: 30px;
 }
