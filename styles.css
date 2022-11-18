@@ -82,6 +82,9 @@ a {
     }
 }
 @media (orientation: portrait) {
+    body{
+        overflow-y: hidden;
+    }
     .grid.main {
         grid-template-areas:
                 /*"header"*/
