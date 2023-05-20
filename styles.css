@@ -66,10 +66,9 @@ a {
     }
     .container.donates {
         grid-area: donates;
-        display: grid;
-        grid-template-columns: repeat(3, auto);
+        display: flex;
         column-gap: 5px;
-        justify-content: start;
+        flex-wrap: wrap;
     }
     .ui-resizable .ui-resizable-handle {
         width: 30px;
@@ -184,4 +183,15 @@ a.donate {
 .donate.d3 {
     background-color: #db66ff;
     white-space: nowrap;
+}
+.container.donates > .donate {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    grid-column-gap: 5px;
+}
+.donate.other :first-child {
+    grid-column: 1/-1;
+}
+.donate.qiwi a {
+    color: revert;
 }
